@@ -15,9 +15,9 @@ const musica = new Audio('./sons/luna-rise-part-one.mp3');
 const musicaPlay = new Audio('./sons/play.wav');
 const musicaPause = new Audio('./sons/pause.mp3');
 const musicaEnd = new Audio('./sons/beep.mp3');
-let focoTp = 1500;
-const curtoTp = 300;
-const longoTp = 900;
+
+let tempoDecorrido = 15;
+
 musica.loop = true;
 let intervaloId = null;
 
@@ -31,16 +31,16 @@ musicaFocoInput.addEventListener('change', () => {
 })
 //escutador de eventos para adicionar lista
 focoBt.addEventListener('click', () => {
-    focoTp = 1500
+    tempoDecorrido = 15
     alterarContexto('foco');
 
 })
 curtoBt.addEventListener('click', () => {
-    focoTp = 300
+    tempoDecorrido = 3
     alterarContexto('descanso-curto');
 })
 longoBt.addEventListener('click', () => {
-    focoTp = 900
+    tempoDecorrido = 9
     alterarContexto('descanso-longo');
 })
 
@@ -69,12 +69,20 @@ function alterarContexto(contexto) {
 }
 
 const contagemRegressiva = () => {
-    if (focoTp == 0) {
+    if (tempoDecorrido == 0) {
         musicaEnd.play();
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco';
+        if (focoAtivo) {
+            const evento = new CustomEvent('FocoFinalizado');
+            document.dispatchEvent(evento)
+        }
+        iniciarOuPausarBt.textContent = 'Começar';
+        playPauseBt.setAttribute('src', './imagens/play_arrow.png');
+
         zerar();
         return
     }
-    focoTp--;
+    tempoDecorrido--;
     mostrarTempo()
 }
 
@@ -100,7 +108,7 @@ function zerar() {
 }
 
 function mostrarTempo() {
-    const tempo = new Date(focoTp * 1000);
+    const tempo = new Date(tempoDecorrido * 1000);
     const tempoFormato = tempo.toLocaleString('pt-Br', { minute: '2-digit', second: '2-digit' })
     timer.innerHTML = `${tempoFormato}`
 }
