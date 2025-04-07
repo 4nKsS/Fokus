@@ -16,7 +16,7 @@ const musicaPlay = new Audio('./sons/play.wav');
 const musicaPause = new Audio('./sons/pause.mp3');
 const musicaEnd = new Audio('./sons/beep.mp3');
 
-let tempoDecorrido = 15;
+let tempoDecorrido = 3;
 
 musica.loop = true;
 let intervaloId = null;
@@ -31,7 +31,7 @@ musicaFocoInput.addEventListener('change', () => {
 })
 //escutador de eventos para adicionar lista
 focoBt.addEventListener('click', () => {
-    tempoDecorrido = 15
+    tempoDecorrido = 3
     alterarContexto('foco');
 
 })
